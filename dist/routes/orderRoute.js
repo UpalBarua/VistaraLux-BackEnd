@@ -11,3 +11,4 @@ router.route("/:id")
     .put(isAuthenticated, adminOnly, processOrder)
     .delete(isAuthenticated, adminOnly, deleteOrder);
 export default router;
+//# sourceMappingURL=orderRoute.js.map

@@ -348,3 +348,4 @@ export const getLineCharts = async (req, res, next) => {
         return next(new ErrorHandler("Failed to getting admin dashboard's line charts", 400));
     }
 };
+//# sourceMappingURL=adminStatsController.js.map

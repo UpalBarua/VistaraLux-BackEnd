@@ -1,3 +1,4 @@
+//
 // const userSchema = new mongoose.Schema({
 //     _id: {
 //         type: String,
@@ -42,26 +43,26 @@ import validator from "validator";
 const userSchema = new mongoose.Schema({
     _id: {
         type: String,
-        required: [true, "Please enter an Id"]
+        required: [true, "Please enter an Id"],
     },
     name: {
         type: String,
-        required: [true, "Please enter your name"]
+        required: [true, "Please enter your name"],
     },
     email: {
         type: String,
         unique: true,
         required: [true, "Please enter your email"],
-        validate: [validator.default.isEmail, "Please enter a valid email"]
+        validate: [validator.default.isEmail, "Please enter a valid email"],
     },
     password: {
         type: String,
         required: [true, "Please enter a password"],
-        minLength: [6, "Password must be at least 6 characters"]
+        minLength: [6, "Password must be at least 6 characters"],
     },
     photo: {
         type: String,
-        default: "" // Set default to empty string
+        default: "", // Set default to empty string
     },
     role: {
         type: String,
@@ -71,11 +72,11 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String,
         enum: ["male", "female"],
-        default: null // Set default to null or undefined
+        default: null, // Set default to null or undefined
     },
     dob: {
         type: Date,
-        default: null // Set default to null
+        default: null, // Set default to null
     },
 }, { timestamps: true, versionKey: false });
 userSchema.virtual("age").get(function () {
@@ -83,10 +84,10 @@ userSchema.virtual("age").get(function () {
     const dob = this.dob;
     let age = today.getFullYear() - dob.getFullYear();
     if (today.getMonth() < dob.getMonth() ||
-        today.getMonth() === dob.getMonth() &&
-            today.getDate() < dob.getDate()) {
+        (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
         age--;
     }
     return age;
 });
 export const UserModel = mongoose.model("user", userSchema);
+//# sourceMappingURL=userModel.js.map

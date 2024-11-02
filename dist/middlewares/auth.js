@@ -50,3 +50,4 @@ export const adminOnly = async (req, res, next) => {
         return next(new ErrorHandler("Authorization failed", 403));
     }
 };
+//# sourceMappingURL=auth.js.map

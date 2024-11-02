@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { createNewUserReqBody, NewOrderReqBody } from "../types/types.js";
-import { OrderModel } from "../models/orderModel.js";
-import { reduceStock } from "../utils/reduceStock.js";
-import { invalidateCache } from "../utils/invalidateCache.js";
-import ErrorHandler from "../utils/errorHandler.js";
-import { ProductModel } from "../models/productModel.js";
 import { dataCaching } from "../index.js";
+import { OrderModel } from "../models/orderModel.js";
+import { ProductModel } from "../models/productModel.js";
+import { createNewUserReqBody, NewOrderReqBody } from "../types/types.js";
+import ErrorHandler from "../utils/errorHandler.js";
 
 // creating my order
 export const postNewOrder = async (
@@ -36,23 +34,23 @@ export const postNewOrder = async (
     // Check stock before placing the order
     for (let i = 0; i < orderedItems.length; i++) {
       const order = orderedItems[i];
-      const product = await ProductModel.findById(order.productId).session(
+      const product = await ProductModel.findById(order?.productId).session(
         session,
       );
 
       if (!product) {
         throw new ErrorHandler(
-          `Product not found: ${order.name}, Id: ${order.productId}`,
+          `Product not found: ${order?.name}, Id: ${order?.productId}`,
           404,
         );
       }
 
-      if (product.stock < order.quantity) {
+      if (product.stock < order?.quantity!) {
         throw new ErrorHandler(`Not enough stock for ${product.name}`, 400);
       }
 
       // Adjust stock within the same transaction
-      product.stock -= order.quantity;
+      product.stock -= order?.quantity!;
       await product.save({ session });
     }
 

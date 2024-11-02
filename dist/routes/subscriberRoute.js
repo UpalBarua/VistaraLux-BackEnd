@@ -4,3 +4,4 @@ const router = express.Router();
 router.post("/do-subscribe", doSubscribe);
 router.get("/all", allSubscriber);
 export default router;
+//# sourceMappingURL=subscriberRoute.js.map

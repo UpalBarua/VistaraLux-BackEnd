@@ -19,3 +19,4 @@ export const generateToken = (res, payload) => {
     });
     return token;
 };
+//# sourceMappingURL=generateToken.js.map

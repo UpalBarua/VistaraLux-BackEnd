@@ -8,3 +8,4 @@ router.get("/all", isAuthenticated, adminOnly, wholeWishlistForAdmin);
 router.get("/:id", isAuthenticated, anUserWishlist);
 router.delete("/delete", isAuthenticated, removeFromWishlist);
 export default router;
+//# sourceMappingURL=wishlistRoute.js.map

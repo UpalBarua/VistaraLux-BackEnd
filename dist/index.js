@@ -13,7 +13,9 @@ if (!process.env.STRIPE_KEY) {
     console.error("STRIPE_KEY is missing in environment variables");
     process.exit(1);
 }
-if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+if (!process.env.CLOUDINARY_CLOUD_NAME ||
+    !process.env.CLOUDINARY_API_KEY ||
+    !process.env.CLOUDINARY_API_SECRET) {
     console.error("Cloudinary configuration is incomplete in environment variables");
     process.exit(1);
 }
@@ -35,7 +37,7 @@ const app = express();
 app.use(cors({
     origin: ["https://vistaralux.vercel.app", "http://localhost:5175"],
     methods: ["POST", "GET", "PUT", "PATCH", "DELETE"],
-    credentials: true
+    credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -46,7 +48,13 @@ app.get("/", (req, res) => {
     res.status(200).json({
         success: true,
         message: "Server is running perfectly.",
-        availableRoutes: ["/api/v1/user", "/api/v1/product", "/api/v1/order", "/api/v1/payment", "/api/v1/admin"]
+        availableRoutes: [
+            "/api/v1/user",
+            "/api/v1/product",
+            "/api/v1/order",
+            "/api/v1/payment",
+            "/api/v1/admin",
+        ],
     });
 });
 // Use routes
@@ -58,12 +66,15 @@ app.use("/api/v1/admin", adminStatsRoute);
 app.use("/api/v1/wishlist", wishlistRoute);
 app.use("/api/v1/subscribe", subscriberRoute);
 // Google OAuth routes
-app.get('/auth/google', passport.authenticate('google', { session: false, scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', passport.authenticate('google', {
+app.get("/auth/google", passport.authenticate("google", {
     session: false,
-    failureRedirect: `${process.env.FRONT_END_URL}/sign-in`
+    scope: ["profile", "email"],
+}));
+app.get("/auth/google/callback", passport.authenticate("google", {
+    session: false,
+    failureRedirect: `${process.env.FRONT_END_URL}/sign-in`,
 }), (req, res) => {
-    res.redirect('/');
+    res.redirect("/");
 });
 // Cloudinary configuration
 cloudinary.config({
@@ -93,7 +104,7 @@ connectDB()
 // import cors from "cors";
 // import passport from "passport";
 // import { v2 as cloudinary } from "cloudinary";
-// import { VercelRequest, VercelResponse } from '@vercel/node'; 
+// import { VercelRequest, VercelResponse } from '@vercel/node';
 // dotenv.config();
 // // Check necessary environment variables
 // if (!process.env.STRIPE_KEY) {
@@ -181,4 +192,5 @@ connectDB()
 // const startServer = (req: VercelRequest, res: VercelResponse) => {
 //     return app(req, res);
 // };
-// export default startServer;
+export default app;
+//# sourceMappingURL=index.js.map

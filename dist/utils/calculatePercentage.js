@@ -4,3 +4,4 @@ export const calculatePercentage = (thisMonth, lastMonth) => {
     const percent = (thisMonth / lastMonth) * 100;
     return Number(percent.toFixed(0));
 };
+//# sourceMappingURL=calculatePercentage.js.map

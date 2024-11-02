@@ -21,3 +21,4 @@ export const uploadOnCloudinary = async (files) => {
         url: result.secure_url,
     }));
 };
+//# sourceMappingURL=uploadOnCloudinary.js.map

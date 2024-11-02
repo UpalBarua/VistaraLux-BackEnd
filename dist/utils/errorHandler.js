@@ -1,4 +1,5 @@
 class ErrorHandler extends Error {
+    statusCode;
     constructor(message, statusCode) {
         super(message);
         this.statusCode = statusCode;
@@ -6,3 +7,4 @@ class ErrorHandler extends Error {
     }
 }
 export default ErrorHandler;
+//# sourceMappingURL=errorHandler.js.map

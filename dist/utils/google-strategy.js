@@ -37,3 +37,4 @@ passport.use(new GoogleStrategy({
         return new ErrorHandler("Operation Failed", 400);
     }
 }));
+//# sourceMappingURL=google-strategy.js.map

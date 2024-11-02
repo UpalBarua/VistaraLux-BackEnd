@@ -8,3 +8,4 @@ export const errorsMiddleware = (err, req, res, next) => {
         message,
     });
 };
+//# sourceMappingURL=errors.js.map

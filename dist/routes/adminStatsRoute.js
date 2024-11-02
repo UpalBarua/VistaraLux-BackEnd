@@ -7,3 +7,4 @@ router.get("/pie-charts", isAuthenticated, adminOnly, getPieCharts);
 router.get("/bar-charts", isAuthenticated, adminOnly, getBarCharts);
 router.get("/line-charts", isAuthenticated, adminOnly, getLineCharts);
 export default router;
+//# sourceMappingURL=adminStatsRoute.js.map

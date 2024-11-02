@@ -11,3 +11,4 @@ export const deleteFromCloudinary = async (publicIds) => {
     });
     await Promise.all(promises);
 };
+//# sourceMappingURL=deleteFromCloudinary.js.map

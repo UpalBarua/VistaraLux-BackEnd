@@ -290,3 +290,4 @@ export const logoutUser = async (req, res, next) => {
         next(new ErrorHandler("An error occurred during logout.", 500));
     }
 };
+//# sourceMappingURL=userController.js.map

@@ -43,3 +43,4 @@ router.route("/:id")
     .put(isAuthenticated, updateUserProfile)
     .delete(isAuthenticated, adminOnly, deleteUser);
 export default router;
+//# sourceMappingURL=userRoute.js.map

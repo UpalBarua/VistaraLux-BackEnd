@@ -8,3 +8,4 @@ router.get("/coupon/all", isAuthenticated, adminOnly, getAllCoupons);
 router.get("/discount", applyCoupon);
 router.delete("/coupon/:id", isAuthenticated, adminOnly, deleteCoupon);
 export default router;
+//# sourceMappingURL=paymentRoute.js.map

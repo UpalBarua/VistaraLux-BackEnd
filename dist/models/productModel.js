@@ -46,3 +46,4 @@ const productSchema = new mongoose.Schema({
     },
 }, { timestamps: true, versionKey: false });
 export const ProductModel = mongoose.model("product", productSchema);
+//# sourceMappingURL=productModel.js.map

@@ -15,3 +15,4 @@ router.route("/:id")
     .put(isAuthenticated, adminOnly, multiUpload, updateProduct)
     .delete(isAuthenticated, adminOnly, deleteProduct);
 export default router;
+//# sourceMappingURL=productRoute.js.map

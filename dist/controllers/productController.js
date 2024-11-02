@@ -234,3 +234,4 @@ export const getAllProductsWithSearch = async (req, res, next) => {
         return next(new ErrorHandler("Failed to get filtered products", 400));
     }
 };
+//# sourceMappingURL=productController.js.map

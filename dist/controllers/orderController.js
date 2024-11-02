@@ -1,7 +1,7 @@
-import { OrderModel } from "../models/orderModel.js";
-import ErrorHandler from "../utils/errorHandler.js";
-import { ProductModel } from "../models/productModel.js";
 import { dataCaching } from "../index.js";
+import { OrderModel } from "../models/orderModel.js";
+import { ProductModel } from "../models/productModel.js";
+import ErrorHandler from "../utils/errorHandler.js";
 // creating my order
 export const postNewOrder = async (req, res, next) => {
     const session = await OrderModel.startSession();
@@ -15,15 +15,15 @@ export const postNewOrder = async (req, res, next) => {
         // Check stock before placing the order
         for (let i = 0; i < orderedItems.length; i++) {
             const order = orderedItems[i];
-            const product = await ProductModel.findById(order.productId).session(session);
+            const product = await ProductModel.findById(order?.productId).session(session);
             if (!product) {
-                throw new ErrorHandler(`Product not found: ${order.name}, Id: ${order.productId}`, 404);
+                throw new ErrorHandler(`Product not found: ${order?.name}, Id: ${order?.productId}`, 404);
             }
-            if (product.stock < order.quantity) {
+            if (product.stock < order?.quantity) {
                 throw new ErrorHandler(`Not enough stock for ${product.name}`, 400);
             }
             // Adjust stock within the same transaction
-            product.stock -= order.quantity;
+            product.stock -= order?.quantity;
             await product.save({ session });
         }
         // Place the order only if all checks are passed
@@ -207,3 +207,4 @@ export const deleteOrder = async (req, res, next) => {
         return next(new ErrorHandler("Failed to delete the order", 400));
     }
 };
+//# sourceMappingURL=orderController.js.map

@@ -75,3 +75,4 @@ const orderSchema = new mongoose.Schema({
         }]
 }, { timestamps: true, versionKey: false });
 export const OrderModel = mongoose.model("order", orderSchema);
+//# sourceMappingURL=orderModel.js.map

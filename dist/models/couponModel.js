@@ -12,3 +12,4 @@ const couponSchema = new mongoose.Schema({
     }
 });
 export const CouponModel = mongoose.model("coupon", couponSchema);
+//# sourceMappingURL=couponModel.js.map

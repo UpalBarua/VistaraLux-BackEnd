@@ -97,3 +97,4 @@ export const removeFromWishlist = async (req, res, next) => {
         return next(new ErrorHandler("Failed to remove product from wishlist", 500));
     }
 };
+//# sourceMappingURL=wishlistController.js.map

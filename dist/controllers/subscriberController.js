@@ -38,3 +38,4 @@ export const allSubscriber = async (req, res, next) => {
         return next(new ErrorHandler("Oops! Failed to retrieved subscribers", 500));
     }
 };
+//# sourceMappingURL=subscriberController.js.map

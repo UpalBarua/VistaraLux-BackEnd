@@ -13,3 +13,4 @@ const subscriberSchema = new mongoose.Schema({
     },
 }, { timestamps: true, versionKey: false });
 export const SubscriberModel = mongoose.model("subscriber", subscriberSchema);
+//# sourceMappingURL=subscriberModel.js.map
