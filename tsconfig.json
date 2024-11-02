@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",
+    "rootDir": "src",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    // "strict": true,
+    "noEmitOnError": false, // Prevents errors from stopping the build
+    "skipLibCheck": true, // Skips type checking of library declaration files
+    "strict": false, // Disable strict type checking
+    "forceConsistentCasingInFileNames": false, // Avoids case-sensitive issues
+    "isolatedModules": true, // Ensures safe transpilation
+    // "suppressImplicitAnyIndexErrors": true
+  }
+}
