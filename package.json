@@ -2,13 +2,13 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/app.js",
+  "main": "./dist/index.js",
   "type": "module",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/index.js",
     "build": "tsc",
     "watch": "tsc -w",
-    "dev": "nodemon dist/app.js"
+    "dev": "nodemon dist/index.js"
   },
   "keywords": [],
   "author": "",

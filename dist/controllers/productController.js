@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { ProductModel } from "../models/productModel.js";
 import ErrorHandler from "../utils/errorHandler.js";
-import { dataCaching } from "../app.js";
+import { dataCaching } from "../index.js";
 import { invalidateCache } from "../utils/invalidateCache.js";
 import { uploadOnCloudinary } from "../utils/uploadOnCloudinary.js";
 import { deleteFromCloudinary } from "../utils/deleteFromCloudinary.js";
@@ -18,7 +18,9 @@ export const createProduct = async (req, res, next) => {
             return next(new ErrorHandler("Maximum 10 photos allowed for a product", 400));
         const userId = req.user?._id;
         if (!userId)
-            return res.status(400).json({ success: false, message: "User is not authenticated." });
+            return res
+                .status(400)
+                .json({ success: false, message: "User is not authenticated." });
         const photosUrl = await uploadOnCloudinary(photos);
         if (!photosUrl || photosUrl.length === 0) {
             return next(new ErrorHandler("Failed to upload photos", 500));
@@ -55,7 +57,7 @@ export const getLatestProducts = async (req, res, next) => {
             success: true,
             message: "Latest products retrieved successfully",
             totalProducts: products.length,
-            products
+            products,
         });
     }
     catch (error) {
@@ -70,7 +72,7 @@ export const getAllCategories = async (req, res, next) => {
             success: true,
             message: "categories retrieved successfully",
             totalCategories: categories.length,
-            categories
+            categories,
         });
     }
     catch (error) {
@@ -88,7 +90,7 @@ export const getAdminProducts = async (req, res, next) => {
             success: true,
             message: "Admin products retrieved successfully",
             totalProducts: products.length,
-            products
+            products,
         });
     }
     catch (error) {
@@ -107,7 +109,7 @@ export const getSingleProduct = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: "A single product retrieved successfully",
-            product
+            product,
         });
     }
     catch (error) {
@@ -126,7 +128,7 @@ export const updateProduct = async (req, res, next) => {
         // Only update photos if new ones are uploaded
         if (photos && photos.length > 0) {
             const photosUrl = await uploadOnCloudinary(photos);
-            const ids = product.photos.map(photo => photo.public_id);
+            const ids = product.photos.map((photo) => photo.public_id);
             await deleteFromCloudinary(ids);
             // Replace product photos with new photos
             product.photos = photosUrl;
@@ -158,7 +160,7 @@ export const deleteProduct = async (req, res, next) => {
         const product = await ProductModel.findById(req.params.id);
         if (!product)
             return next(new ErrorHandler("Product not found", 404));
-        const ids = product.photos.map(photo => photo.public_id);
+        const ids = product.photos.map((photo) => photo.public_id);
         await deleteFromCloudinary(ids);
         // Delete the product from the database
         await product.deleteOne();
@@ -180,7 +182,7 @@ export const deleteProduct = async (req, res, next) => {
 // search products
 export const getAllProductsWithSearch = async (req, res, next) => {
     try {
-        console.log('Inside searchProducts route', req.query);
+        console.log("Inside searchProducts route", req.query);
         const { search, minPrice, maxPrice, category, sort } = req.query;
         const page = Number(req.query.page) || 1;
         const limit = Number(process.env.PRODUCT_PER_PAGE) || 9;

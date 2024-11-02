@@ -1,17 +1,20 @@
 import { CouponModel } from "../models/couponModel.js";
 import ErrorHandler from "../utils/errorHandler.js";
-import { stripe } from "../app.js";
+import { stripe } from "../index.js";
 // create payment system
 export const createPaymentIntent = async (req, res, next) => {
     try {
         const { amount } = req.body;
         if (!amount)
             return next(new ErrorHandler("Please enter the amount", 400));
-        const paymentIntent = await stripe.paymentIntents.create({ amount: 1010, currency: "USD" });
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: 1010,
+            currency: "USD",
+        });
         res.status(201).json({
             success: true,
             message: "Payment Successful",
-            clientSecret: paymentIntent.client_secret
+            clientSecret: paymentIntent.client_secret,
         });
     }
     catch (error) {
@@ -38,7 +41,7 @@ export const createCoupon = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Coupon created Successfully",
-            data: coupon
+            data: coupon,
         });
     }
     catch (error) {
@@ -56,7 +59,7 @@ export const applyCoupon = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "congrats! You've got the discount",
-            data: discount
+            data: discount,
         });
     }
     catch (error) {
@@ -73,7 +76,7 @@ export const getAllCoupons = async (req, res, next) => {
             success: true,
             message: "All coupons retrieved successfully",
             totalCoupons: coupons.length,
-            data: coupons
+            data: coupons,
         });
     }
     catch (error) {
@@ -91,7 +94,7 @@ export const deleteCoupon = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Coupon deleted successfully",
-            data: coupon
+            data: coupon,
         });
     }
     catch (error) {

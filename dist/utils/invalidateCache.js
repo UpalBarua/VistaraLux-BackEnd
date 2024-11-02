@@ -1,5 +1,5 @@
-import { dataCaching } from "../app.js";
-export const invalidateCache = ({ product, order, admin, userId, productId, orderId }) => {
+import { dataCaching } from "../index.js";
+export const invalidateCache = ({ product, order, admin, userId, productId, orderId, }) => {
     if (product) {
         const productKeys = [
             "latest-products",
@@ -9,14 +9,18 @@ export const invalidateCache = ({ product, order, admin, userId, productId, orde
         if (typeof productId === "string")
             productKeys.push(`product-${productId}`);
         if (typeof product === "object") {
-            productId.forEach(i => {
+            productId.forEach((i) => {
                 productKeys.push(`product-${i}`);
             });
         }
         dataCaching.del(productKeys);
     }
     if (order) {
-        const ordersKeys = ["all-orders", `my-orders-${userId}`, `order-${orderId}`];
+        const ordersKeys = [
+            "all-orders",
+            `my-orders-${userId}`,
+            `order-${orderId}`,
+        ];
         dataCaching.del(ordersKeys);
     }
     if (admin) {
@@ -24,7 +28,7 @@ export const invalidateCache = ({ product, order, admin, userId, productId, orde
             "admin-dashboard-stats",
             "admin-pie-charts",
             "admin-bar-charts",
-            "admin-line-charts"
+            "admin-line-charts",
         ]);
     }
 };

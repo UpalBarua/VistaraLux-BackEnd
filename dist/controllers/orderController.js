@@ -1,13 +1,13 @@
 import { OrderModel } from "../models/orderModel.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { ProductModel } from "../models/productModel.js";
-import { dataCaching } from "../app.js";
+import { dataCaching } from "../index.js";
 // creating my order
 export const postNewOrder = async (req, res, next) => {
     const session = await OrderModel.startSession();
     session.startTransaction(); // Start transaction
     try {
-        const { shippingInfo, billingInfo, orderedItems, tax, shippingCharge, discount, subtotal, total } = req.body;
+        const { shippingInfo, billingInfo, orderedItems, tax, shippingCharge, discount, subtotal, total, } = req.body;
         // Validate required fields
         if (!shippingInfo || !billingInfo || !orderedItems || !tax || !total) {
             throw new ErrorHandler("Please fulfill all fields", 400);
@@ -27,7 +27,8 @@ export const postNewOrder = async (req, res, next) => {
             await product.save({ session });
         }
         // Place the order only if all checks are passed
-        const [order] = await OrderModel.create([{
+        const [order] = await OrderModel.create([
+            {
                 shippingInfo,
                 billingInfo,
                 orderedItems,
@@ -35,8 +36,9 @@ export const postNewOrder = async (req, res, next) => {
                 shippingCharge,
                 discount,
                 subtotal,
-                total
-            }], { session });
+                total,
+            },
+        ], { session });
         await session.commitTransaction(); // Commit transaction
         session.endSession();
         // invalidateCache({
@@ -49,7 +51,7 @@ export const postNewOrder = async (req, res, next) => {
         return res.status(201).json({
             success: true,
             message: "Order placed successfully",
-            order
+            order,
         });
     }
     catch (error) {
@@ -109,7 +111,7 @@ export const getAllOrders = async (req, res, next) => {
             success: true,
             message: `All orders history retrieved successfully`,
             totalOrder: orders.length,
-            orders
+            orders,
         });
     }
     catch (error) {
@@ -134,7 +136,7 @@ export const getSingleOrder = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Order details retrieved successfully",
-            order
+            order,
         });
     }
     catch (error) {
@@ -171,7 +173,7 @@ export const processOrder = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Order processed successfully",
-            order
+            order,
         });
     }
     catch (error) {
@@ -197,7 +199,7 @@ export const deleteOrder = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Order deleted Successfully",
-            order
+            order,
         });
     }
     catch (error) {

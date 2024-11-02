@@ -13,59 +13,61 @@ export const getDashboardStats = async (req, res, next) => {
         sixMonthAgo.setMonth(sixMonthAgo.getMonth() - 6);
         const thisMonth = {
             start: new Date(today.getFullYear(), today.getMonth(), 1),
-            end: today
+            end: today,
         };
         const lastMonth = {
             start: new Date(today.getFullYear(), today.getMonth() - 1, 1),
-            end: new Date(today.getFullYear(), today.getMonth(), 0)
+            end: new Date(today.getFullYear(), today.getMonth(), 0),
         };
         // products
         const thisMonthProductsPromise = await ProductModel.find({
             createdAt: {
                 $gte: thisMonth.start,
-                $lte: thisMonth.end
-            }
+                $lte: thisMonth.end,
+            },
         });
         const lastMonthProductsPromise = ProductModel.find({
             createdAt: {
                 $gte: lastMonth.start,
-                $lte: lastMonth.end
-            }
+                $lte: lastMonth.end,
+            },
         });
         // user
         const thisMonthUsersPromise = await UserModel.find({
             createdAt: {
                 $gte: thisMonth.start,
-                $lte: thisMonth.end
-            }
+                $lte: thisMonth.end,
+            },
         });
         const lastMonthUsersPromise = UserModel.find({
             createdAt: {
                 $gte: lastMonth.start,
-                $lte: lastMonth.end
-            }
+                $lte: lastMonth.end,
+            },
         });
         // order
         const thisMonthOrdersPromise = await OrderModel.find({
             createdAt: {
                 $gte: thisMonth.start,
-                $lte: thisMonth.end
-            }
+                $lte: thisMonth.end,
+            },
         });
         const lastMonthOrdersPromise = OrderModel.find({
             createdAt: {
                 $gte: lastMonth.start,
-                $lte: lastMonth.end
-            }
+                $lte: lastMonth.end,
+            },
         });
         const lastSixMonthOrdersPromise = OrderModel.find({
             createdAt: {
                 $gte: sixMonthAgo,
-                $lte: today
-            }
+                $lte: today,
+            },
         });
-        const latestTransactionPromise = OrderModel.find({}).select(["orderedItems", "discount", "total", "status"]).limit(5);
-        const [thisMonthProducts, thisMonthUsers, thisMonthOrders, lastMonthProducts, lastMonthUsers, lastMonthOrders, userCount, productsCount, allOrders, lastSixMonthOrders, categories, femaleUserCount, latestTransactions] = await Promise.all([
+        const latestTransactionPromise = OrderModel.find({})
+            .select(["orderedItems", "discount", "total", "status"])
+            .limit(5);
+        const [thisMonthProducts, thisMonthUsers, thisMonthOrders, lastMonthProducts, lastMonthUsers, lastMonthOrders, userCount, productsCount, allOrders, lastSixMonthOrders, categories, femaleUserCount, latestTransactions,] = await Promise.all([
             thisMonthProductsPromise,
             thisMonthUsersPromise,
             thisMonthOrdersPromise,
@@ -78,14 +80,14 @@ export const getDashboardStats = async (req, res, next) => {
             lastSixMonthOrdersPromise,
             ProductModel.distinct("category"),
             UserModel.countDocuments({ gender: "female" }),
-            latestTransactionPromise
+            latestTransactionPromise,
         ]);
         const thisMonthRevenue = thisMonthOrders.reduce((total, order) => total + (order.total || 0), 0);
         const lastMonthRevenue = lastMonthOrders.reduce((total, order) => total + (order.total || 0), 0);
         const audit = {
             users: userCount,
             products: productsCount,
-            orders: allOrders.length
+            orders: allOrders.length,
         };
         const revenue = allOrders.reduce((total, order) => total + (order.total || 0), 0);
         const auditPercentages = {
@@ -96,7 +98,7 @@ export const getDashboardStats = async (req, res, next) => {
         };
         const orderMonthCounts = new Array(6).fill(0);
         const orderMonthRevenues = new Array(6).fill(0);
-        lastSixMonthOrders.forEach(order => {
+        lastSixMonthOrders.forEach((order) => {
             const creationDate = order.createdAt;
             const monthsDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
             if (monthsDiff < 6) {
@@ -107,9 +109,9 @@ export const getDashboardStats = async (req, res, next) => {
         const categoryCount = await getInventories({ categories, productsCount });
         const userRatio = {
             male: userCount - femaleUserCount,
-            female: femaleUserCount
+            female: femaleUserCount,
         };
-        const modifiedLatestTransaction = latestTransactions.map(transaction => ({
+        const modifiedLatestTransaction = latestTransactions.map((transaction) => ({
             _id: transaction._id,
             discount: transaction.discount,
             amount: transaction.total,
@@ -122,16 +124,16 @@ export const getDashboardStats = async (req, res, next) => {
             auditPercentages,
             charts: {
                 order: orderMonthCounts,
-                revenue: orderMonthRevenues
+                revenue: orderMonthRevenues,
             },
             categoryCount,
             userRatio,
-            latestTransaction: modifiedLatestTransaction
+            latestTransaction: modifiedLatestTransaction,
         };
         res.status(200).json({
             success: true,
             message: "Admin Dashboard stats retrieved successfully",
-            adminDashboardStats
+            adminDashboardStats,
         });
     }
     catch (error) {
@@ -150,12 +152,12 @@ export const getPieCharts = async (req, res, next) => {
                     discount: 1,
                     total: 1,
                     subtotal: {
-                        $sum: "$orderedItems.subtotal"
-                    }
-                }
-            }
+                        $sum: "$orderedItems.subtotal",
+                    },
+                },
+            },
         ]);
-        const [processingOrder, shippedOrder, deliveredOrder, categories, productsCount, productsOutOfStock, allOrders, allUsers, admins, customers] = await Promise.all([
+        const [processingOrder, shippedOrder, deliveredOrder, categories, productsCount, productsOutOfStock, allOrders, allUsers, admins, customers,] = await Promise.all([
             OrderModel.countDocuments({ status: "Processing" }),
             OrderModel.countDocuments({ status: "Shipped" }),
             OrderModel.countDocuments({ status: "Delivered" }),
@@ -165,18 +167,21 @@ export const getPieCharts = async (req, res, next) => {
             allOrderPromise,
             UserModel.find({}).select(["dob"]),
             UserModel.countDocuments({ role: "admin" }),
-            UserModel.countDocuments({ role: "user" })
+            UserModel.countDocuments({ role: "user" }),
         ]);
         const orderFulfillment = {
             processing: processingOrder,
             shipped: shippedOrder,
             delivered: deliveredOrder,
-            allOrders
+            allOrders,
         };
-        const productCategories = await getInventories({ categories, productsCount });
+        const productCategories = await getInventories({
+            categories,
+            productsCount,
+        });
         const stockAvailability = {
             inStock: productsCount - productsOutOfStock,
-            outOfStock: productsOutOfStock
+            outOfStock: productsOutOfStock,
         };
         const grossIncome = allOrders.reduce((prev, order) => prev + (order.total || 0), 0);
         const discount = allOrders.reduce((prev, order) => prev + (order.discount || 0), 0);
@@ -189,16 +194,16 @@ export const getPieCharts = async (req, res, next) => {
             discount,
             productionCost,
             burnt,
-            marketingCost
+            marketingCost,
         };
         const usersAgeGroups = {
-            teen: allUsers.filter(user => user.age < 20).length,
-            adult: allUsers.filter(user => user.age > 20 && user.age < 40).length,
-            old: allUsers.filter(user => user.age > 20 && user.age > 40).length
+            teen: allUsers.filter((user) => user.age < 20).length,
+            adult: allUsers.filter((user) => user.age > 20 && user.age < 40).length,
+            old: allUsers.filter((user) => user.age > 20 && user.age > 40).length,
         };
         const adminCustomer = {
             admins,
-            customers
+            customers,
         };
         const pieCharts = {
             orderFulfillment,
@@ -206,12 +211,12 @@ export const getPieCharts = async (req, res, next) => {
             stockAvailability,
             revenueDistribution,
             usersAgeGroups,
-            adminCustomer
+            adminCustomer,
         };
         res.status(200).json({
             success: true,
             message: "Admin dashboard's pie charts retrieved successfully",
-            pieCharts
+            pieCharts,
         });
     }
     catch (error) {
@@ -230,25 +235,25 @@ export const getBarCharts = async (req, res, next) => {
         const lastSixMonthUsersPromise = UserModel.find({
             createdAt: {
                 $gte: sixMonthAgo,
-                $lte: today
-            }
+                $lte: today,
+            },
         }).select("createdAt");
         const lastSixMonthProductsPromise = ProductModel.find({
             createdAt: {
                 $gte: sixMonthAgo,
-                $lte: today
-            }
+                $lte: today,
+            },
         }).select("createdAt");
         const lastTwelveMonthOrdersPromise = OrderModel.find({
             createdAt: {
                 $gte: twelveMonthAgo,
-                $lte: today
-            }
+                $lte: today,
+            },
         }).select("createdAt");
         const [lastSixMonthUsers, lastSixMonthProducts, lastTwelveMonthOrders] = await Promise.all([
             lastSixMonthProductsPromise,
             lastSixMonthUsersPromise,
-            lastTwelveMonthOrdersPromise
+            lastTwelveMonthOrdersPromise,
         ]);
         const usersCount = getChartData({
             length: 6,
@@ -258,22 +263,22 @@ export const getBarCharts = async (req, res, next) => {
         const productsCount = getChartData({
             length: 6,
             today,
-            docArr: lastSixMonthProducts
+            docArr: lastSixMonthProducts,
         });
         const ordersCount = getChartData({
             length: 12,
             today,
-            docArr: lastTwelveMonthOrders
+            docArr: lastTwelveMonthOrders,
         });
         const barCharts = {
             users: usersCount,
             products: productsCount,
-            orders: ordersCount
+            orders: ordersCount,
         };
         res.status(200).json({
             success: true,
             message: "Admin dashboard's bar charts retrieved successfully",
-            barCharts
+            barCharts,
         });
     }
     catch (error) {
@@ -294,13 +299,13 @@ export const getLineCharts = async (req, res, next) => {
         const baseQuery = {
             createdAt: {
                 $gte: twelveMonthAgo,
-                $lte: today
-            }
+                $lte: today,
+            },
         };
-        const [lastTwelveMonthUsers, lastTwelveMonthProducts, lastTwelveMonthOrders] = await Promise.all([
+        const [lastTwelveMonthUsers, lastTwelveMonthProducts, lastTwelveMonthOrders,] = await Promise.all([
             UserModel.find(baseQuery).select("createdAt"),
             ProductModel.find(baseQuery).select("createdAt"),
-            OrderModel.find(baseQuery).select(["createdAt", "discount", "total"])
+            OrderModel.find(baseQuery).select(["createdAt", "discount", "total"]),
         ]);
         const usersCount = getChartData({
             length: 12,
@@ -310,32 +315,32 @@ export const getLineCharts = async (req, res, next) => {
         const productsCount = getChartData({
             length: 12,
             today,
-            docArr: lastTwelveMonthProducts
+            docArr: lastTwelveMonthProducts,
         });
         const discount = getChartData({
             length: 12,
             today,
             docArr: lastTwelveMonthOrders,
-            property: "discount"
+            property: "discount",
         });
         const revenue = getChartData({
             length: 12,
             today,
             docArr: lastTwelveMonthOrders,
-            property: "total"
+            property: "total",
         });
         const lineCharts = {
             users: usersCount,
             products: productsCount,
             discount,
-            revenue
+            revenue,
         };
         // dataCaching.set(key, JSON.stringify(lineCharts))
         // }
         res.status(200).json({
             success: true,
             message: "Admin dashboard's line charts retrieved successfully",
-            lineCharts
+            lineCharts,
         });
     }
     catch (error) {
