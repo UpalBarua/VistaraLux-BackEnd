@@ -3,7 +3,7 @@
   "builds": [
     {
       "src": "dist/app.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
       "config": { "includeFiles": ["dist/**"] }
     }
   ],
@@ -11,7 +11,6 @@
     {
       "src": "/(.*)",
       "dest": "dist/app.js"
-      "methods": ["GET", "POST", "PATCH", "DELETE", "OPTIONS"]
     }
   ]
 }
